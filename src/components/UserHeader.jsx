@@ -34,18 +34,41 @@ const UserHeader = () => {
     <VStack gap={4} alignItems={"start"}>
       <Flex justifyContent={"space-between"} w={"full"}>
         <Box>
-          <Text fontSize={"2xl"} fontWeight={"bold"}>
+          <Text
+            fontSize={{
+              base: "xl",
+              md: "2xl",
+            }}
+            fontWeight={"bold"}
+          >
             Mark Zuckerberg
           </Text>
           <Flex gap={2} alignItems={"center"}>
             <Text fontSize={"sm"}>markzuckerberg</Text>
-            <Text fontSize={"sl"} bg={"gray.dark"} p={1} borderRadius={"full"}>
+            <Text
+              fontSize={{
+                base: "xs",
+                md: "sm",
+                lg: "md",
+              }}
+              bg={"gray.dark"}
+              p={1}
+              borderRadius={"full"}
+            >
               threads.net
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Avatar name="Mark Zuckerberg" src="/zuck-avatar.png" size={"xl"} />
+          <Avatar
+            name="Mark Zuckerberg"
+            src="/zuck-avatar.png"
+            size={{
+              base: "md",
+              md: "lg",
+              lg: "xl",
+            }}
+          />
         </Box>
       </Flex>
       <Text>Co-founder, execution chairman and CEO of Meta Platform</Text>

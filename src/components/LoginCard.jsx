@@ -23,7 +23,7 @@ import useShowToast from "../hooks/useShowToast";
 
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const showToast = useShowToast();
   const setUser = useSetRecoilState(userAtom);
 
@@ -33,7 +33,7 @@ export default function LoginCard() {
     password: "",
   });
 
-  const handleSignup = async () => {
+  const handleLogin = async () => {
     try {
       const res = await fetch("/api/users/login", {
         method: "POST",
@@ -51,7 +51,7 @@ export default function LoginCard() {
       localStorage.setItem("user-threads", JSON.stringify(data));
       setUser(data);
     } catch (error) {
-      console.log(error);
+      showToast("Error", error, "error");
     }
   };
 
@@ -116,7 +116,7 @@ export default function LoginCard() {
                 _hover={{
                   bg: useColorModeValue("gray.700", "gray.800"),
                 }}
-                onClick={handleSignup}
+                onClick={handleLogin}
               >
                 Log in
               </Button>

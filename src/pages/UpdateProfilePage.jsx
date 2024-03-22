@@ -15,8 +15,10 @@ import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import usePreviewImg from "../hooks/usePreviewImg";
 import useShowToast from "../hooks/useShowToast";
+import { useNavigate } from "react-router-dom";
 
 export default function UpdateProfilePage() {
+  const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userAtom);
   const [inputs, setInputs] = useState({
     name: user.name,
@@ -48,7 +50,7 @@ export default function UpdateProfilePage() {
       if (data.error) {
         showToast("Error", data.error, "error");
         return;
-		}
+      }
       showToast("Success", "Profile updated successfully", "success");
       setUser(data);
       localStorage.setItem("user-threads", JSON.stringify(data));
@@ -157,6 +159,7 @@ export default function UpdateProfilePage() {
               _hover={{
                 bg: "red.500",
               }}
+              onClick={() => navigate("/")}
             >
               Cancel
             </Button>

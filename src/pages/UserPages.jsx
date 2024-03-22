@@ -1,11 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserHeader from "../components/UserHeader";
 import UserPost from "../components/UserPost";
+import { useParams } from "react-router-dom";
+import useShowToast from "../hooks/useShowToast";
 
 const UserPages = () => {
+  const showToast = useShowToast();
+  const [user, setUser] = useState(null);
+
+  const { username } = useParams();
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await fetch(`/api/users/profile/${username}`);
+        const data = await res.json();
+        if (data.error) {
+          showToast("Error", data.error, "error");
+          return;
+        }
+
+        setUser(data?.user);
+      } catch (error) {
+        showToast("Error", error, "error");
+        return;
+      }
+    };
+
+    getUser();
+  }, [username, showToast]);
+
+  if (!user) return null;
   return (
     <div>
-      <UserHeader />
+      <UserHeader user={user} />
       <UserPost
         likes={1200}
         replies={401}

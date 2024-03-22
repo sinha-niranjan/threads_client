@@ -26,7 +26,7 @@ const UserHeader = ({ user }) => {
   const showToast = useShowToast();
   const currentUser = useRecoilValue(userAtom); // logged in user
   const [following, setFllowings] = useState(
-    user.followers.includes(currentUser._id)
+    user?.followers.includes(currentUser?._id)
   );
 
   const copyURL = () => {
@@ -66,7 +66,7 @@ const UserHeader = ({ user }) => {
         user.followers.pop(); // simulate removing from followers only for client side
       } else {
         showToast("Success", `Follow ${user.name}`, "success"); // simulate adding from followers only for client side
-        user.followers.push(currentUser._id);
+        user?.followers.push(currentUser?._id);
       }
       setFllowings(!following);
     } catch (error) {
@@ -131,12 +131,12 @@ const UserHeader = ({ user }) => {
         )}
       </Flex>
       <Text>{user?.bio}</Text>
-      {user._id === currentUser._id && (
+      {user._id === currentUser?._id && (
         <Link as={RouterLink} to={"/update"}>
           <Button size={"sm"}>Update Profile</Button>
         </Link>
       )}
-      {user._id !== currentUser._id && (
+      {user._id !== currentUser?._id && (
         <Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating}>
           {following ? "Unfollow" : "Follow"}
         </Button>

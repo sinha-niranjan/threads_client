@@ -9,6 +9,7 @@ import { useRecoilValue } from "recoil";
 import userAtom from "./atoms/userAtom";
 import LogoutButton from "./components/LogoutButton";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
+import CreatePost from "./components/CreatePost";
 
 function App() {
   const user = useRecoilValue(userAtom);
@@ -26,13 +27,14 @@ function App() {
         />{" "}
         <Route
           path="/update"
-          element={user ? <UpdateProfilePage /> : <Navigate to={"/auth"} /> }
+          element={user ? <UpdateProfilePage /> : <Navigate to={"/auth"} />}
         />
         <Route path="/:username" element={<UserPages />} />
         <Route path="/:username/post/:pid" element={<PostPages />} />
       </Routes>
 
       {user && <LogoutButton />}
+      {user && <CreatePost />}
     </Container>
   );
 }

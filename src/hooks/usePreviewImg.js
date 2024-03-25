@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useShowToast from "./useShowToast";
-import Resizer from "react-image-file-resizer"
+import Resizer from "react-image-file-resizer";
 
 const usePreviewImg = () => {
   const [imgUrl, setImgUrl] = useState(null);
@@ -13,8 +13,8 @@ const usePreviewImg = () => {
       reader.onloadend = () => {
         Resizer.imageFileResizer(
           file,
-          150,
-          150,
+          500,
+          500,
           file.type === "image/jpeg" ? "JPEG" : "PNG",
           100,
           0,
@@ -24,8 +24,7 @@ const usePreviewImg = () => {
           },
           "base64"
         );
-		//   setImgUrl(reader.result);
-		  console.log(reader)
+          // setImgUrl(reader.result);
       };
 
       reader.readAsDataURL(file);

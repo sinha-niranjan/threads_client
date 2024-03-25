@@ -12,6 +12,7 @@ import {
   Portal,
   Text,
   VStack,
+  useColorMode,
   useToast,
 } from "@chakra-ui/react";
 import { BsInstagram } from "react-icons/bs";
@@ -22,6 +23,7 @@ import { Link as RouterLink } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 
 const UserHeader = ({ user }) => {
+  const { colorMode } = useColorMode();
   const [updating, setUpdating] = useState(false);
   const showToast = useShowToast();
   const currentUser = useRecoilValue(userAtom); // logged in user
@@ -96,7 +98,7 @@ const UserHeader = ({ user }) => {
                 md: "sm",
                 lg: "md",
               }}
-              bg={"gray.dark"}
+              bg={colorMode === "dark" ? "gray.dark" : "gray.300"}
               p={1}
               borderRadius={"full"}
             >
@@ -150,17 +152,32 @@ const UserHeader = ({ user }) => {
           <Link color={"gray.light"}>instagram.com</Link>
         </Flex>
         <Flex>
-          <Box className="icon-container">
+          <Box
+            className={
+              colorMode === "dark"
+                ? "icon-container-dark "
+                : "icon-container-light"
+            }
+          >
             <BsInstagram size={24} cursor={"pointer"} />
           </Box>
 
           <Menu>
-            <MenuButton className="icon-container">
+            <MenuButton
+              className={
+                colorMode === "dark"
+                  ? "icon-container-dark "
+                  : "icon-container-light"
+              }
+            >
               <CgMoreO size={24} cursor={"pointer"} />
             </MenuButton>
             <Portal>
-              <MenuList bg={"gray.dark"}>
-                <MenuItem bg={"gray.dark"} onClick={copyURL}>
+              <MenuList bg={colorMode === "dark" ? "gray.900" : "gray.300"}>
+                <MenuItem
+                  bg={colorMode === "dark" ? "gray.900" : "gray.300"}
+                  onClick={copyURL}
+                >
                   Copy link{" "}
                 </MenuItem>
               </MenuList>

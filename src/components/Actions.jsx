@@ -24,7 +24,7 @@ const Actions = ({ post: post_ }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
-  const [liked, setLiked] = useState(post_.likes.includes(user?._id));
+  const [liked, setLiked] = useState(post_?.likes.includes(user?._id));
   const [post, setPost] = useState(post_);
   const [isLiking, setIsLiking] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
@@ -143,7 +143,7 @@ const Actions = ({ post: post_ }) => {
 
       <Flex gap={2} alignItems={"center"}>
         <Text color={"gray.light"} fontSize="sm">
-          {post.replies.length} replies
+          {post?.replies.length} replies
         </Text>
         <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
         <Text color={"gray.light"} fontSize="sm">

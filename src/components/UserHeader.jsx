@@ -64,11 +64,11 @@ const UserHeader = ({ user }) => {
         return;
       }
       if (following) {
-        showToast("Success", `Unfollow ${user.name}`, "success");
+        showToast("Success", `Unfollow ${user?.name}`, "success");
         user.followers.pop(); // simulate removing from followers only for client side
       } else {
         showToast("Success", `Follow ${user.name}`, "success"); // simulate adding from followers only for client side
-        user?.followers.push(currentUser?._id);
+        user?.followers?.push(currentUser?._id);
       }
       setFllowings(!following);
     } catch (error) {
@@ -106,7 +106,7 @@ const UserHeader = ({ user }) => {
             </Text>
           </Flex>
         </Box>
-        {user.profilePic ? (
+        {user?.profilePic ? (
           <Box>
             <Avatar
               name={user?.name}
@@ -133,12 +133,12 @@ const UserHeader = ({ user }) => {
         )}
       </Flex>
       <Text>{user?.bio}</Text>
-      {user._id === currentUser?._id && (
+      {user?._id === currentUser?._id && (
         <Link as={RouterLink} to={"/update"}>
           <Button size={"sm"}>Update Profile</Button>
         </Link>
       )}
-      {user._id !== currentUser?._id && (
+      {user?._id !== currentUser?._id && (
         <Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating}>
           {following ? "Unfollow" : "Follow"}
         </Button>

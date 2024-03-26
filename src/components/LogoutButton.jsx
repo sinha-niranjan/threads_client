@@ -1,14 +1,12 @@
 import { Button, useColorMode } from "@chakra-ui/react";
 import React from "react";
+import { FiLogOut } from "react-icons/fi";
 import { useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
-import { FiLogOut } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
   const { colorMode } = useColorMode();
-  const navigate = useNavigate();
   const showToast = useShowToast();
   const setUser = useSetRecoilState(userAtom);
   const handleLogout = async () => {
@@ -29,7 +27,6 @@ const LogoutButton = () => {
 
       localStorage.removeItem("user-threads");
       setUser(null);
-      navigate("/");
     } catch (error) {
       console.log(error);
     }

@@ -8,7 +8,6 @@ import Actions from "./Actions";
 const Post = ({ post, postedBy }) => {
   const showToast = useShowToast();
   const [user, setUser] = useState(null);
-  const [liked, setLiked] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const Post = ({ post, postedBy }) => {
           <Avatar
             size={"md"}
             name={user?.name}
-            src={user?.profilePic}
+            src={user?.userProfilePic}
             onClick={(e) => {
               e.preventDefault();
               navigate(`/${user?.username}`);
@@ -44,12 +43,12 @@ const Post = ({ post, postedBy }) => {
           />
           <Box w="1px" h={"full"} bg="gray.light" my={2}></Box>
           <Box position={"relative"} w={"full"}>
-            {post.replies.length === 0 && <Text textAlign={"center"}>🥱 </Text>}
-            {post.replies[0] && (
+            {post?.replies.length === 0 && <Text textAlign={"center"}>🥱 </Text>}
+            {post?.replies[0] && (
               <Avatar
                 size={"xs"}
                 name={post.replies[0].name}
-                src={post.replies[0].profilePic}
+                src={post.replies[0].userProfilePic}
                 position={"absolute"}
                 top={"0px"}
                 left={"15px"}
@@ -64,7 +63,7 @@ const Post = ({ post, postedBy }) => {
               <Avatar
                 size={"xs"}
                 name={post.replies[1].name}
-                src={post.replies[1].profilePic}
+                src={post.replies[1].userProfilePic}
                 position={"absolute"}
                 bottom={"0px"}
                 right={"-5px"}
@@ -114,7 +113,7 @@ const Post = ({ post, postedBy }) => {
                 textAlign={"right"}
                 color={"gray.light"}
               >
-                {formatDistanceToNow(new Date(post.createdAt), {
+                {formatDistanceToNow(new Date(post?.createdAt), {
                   addSuffix: true,
                 })}
               </Text>
@@ -132,12 +131,7 @@ const Post = ({ post, postedBy }) => {
             </Box>
           )}
           <Flex gap={3}>
-            <Actions
-              liked={liked}
-              setLiked={setLiked}
-              likes={post.likes.length}
-              replies={post.replies.length}
-            />
+            <Actions post={post} />
           </Flex>
         </Flex>
       </Flex>

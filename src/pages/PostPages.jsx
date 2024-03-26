@@ -44,7 +44,7 @@ const PostPages = () => {
         <Image src="/post1.png" w={"full"} />
       </Box>
       <Flex gap={3} my={3}>
-        <Actions liked={liked} setLiked={setLiked} likes={100} replies={10} />
+        <Actions post={post} />
       </Flex>
       <Divider my={4} />
       <Flex justifyContent={"space-between"}>

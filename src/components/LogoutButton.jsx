@@ -37,7 +37,7 @@ const LogoutButton = () => {
   return (
     <Button
       position={"fixed"}
-      top={"30px"}
+      top={{ md: "30px", sm: "50px" }}
       right={"30px"}
       size={"sm"}
       bg={colorMode === "dark" ? "gray.900" : "gray.300"}

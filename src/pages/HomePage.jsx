@@ -1,13 +1,15 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Spinner } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
+import { BsTypeH1 } from "react-icons/bs";
+import Post from "../components/Post";
 
 const HomePage = () => {
-  const [post, setPost] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const showToast = useShowToast();
   const user = useRecoilValue(userAtom);
 
@@ -18,7 +20,8 @@ const HomePage = () => {
         const res = await fetch("/api/post/feed");
 
         const data = await res.json();
-        console.log(data);
+
+        setPosts(data);
         if (data.error) {
           showToast("Error", data.error, "error");
         }
@@ -32,11 +35,23 @@ const HomePage = () => {
     getFeedPosts();
   }, []);
   return (
-    <Link to={`/${user.username}`}>
-      <Flex w={"full"} justifyContent={"center"}>
-        <Button mx={"auto"}>Visit Profile Page</Button>
-      </Flex>
-    </Link>
+    <>
+      {!loading && posts.length === 0 && (
+        <h1>
+          {" "}
+          Follow some users to see the feed. or your followed users has not
+          posted yet anything.
+        </h1>
+      )}
+      {loading && (
+        <Flex justify={"center"}>
+          <Spinner size={"xl"} />
+        </Flex>
+      )}
+      {posts.map((post) => (
+        <Post key={post._id} post={post} postedBy={post.postedBy} />
+      ))}
+    </>
   );
 };
 

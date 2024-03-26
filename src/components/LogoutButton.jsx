@@ -37,8 +37,8 @@ const LogoutButton = () => {
   return (
     <Button
       position={"fixed"}
-      top={"50px"}
-      right={"40px"}
+      top={"20px"}
+      right={"20px"}
       size={"sm"}
       bg={colorMode === "dark" ? "gray.900" : "gray.300"}
       onClick={handleLogout}

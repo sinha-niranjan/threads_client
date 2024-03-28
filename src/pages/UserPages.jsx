@@ -5,12 +5,14 @@ import Post from "../components/Post";
 import UserHeader from "../components/UserHeader";
 import useShowToast from "../hooks/useShowToast";
 import useGetUserProfile from "../hooks/useGetUserProfile";
+import { useRecoilState } from "recoil";
+import postsAtom from "../atoms/postsAtom";
 
 const UserPages = () => {
   const showToast = useShowToast();
   const { user, loading } = useGetUserProfile();
   const { username } = useParams();
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useRecoilState(postsAtom);
   const [fetchingPosts, setFetchingPosts] = useState(true);
 
   useEffect(() => {
@@ -27,7 +29,7 @@ const UserPages = () => {
           return;
         }
         setPosts(data);
-        console.log(data);
+        
       } catch (error) {
         showToast("Error", error.message, "error");
         setPosts([]);
@@ -37,7 +39,7 @@ const UserPages = () => {
     };
 
     getPosts();
-  }, [username, showToast]);
+  }, [username, showToast, setPosts]);
 
   if (!user && loading)
     return (
@@ -58,7 +60,7 @@ const UserPages = () => {
       )}
 
       {posts.map((post) => (
-        <Post key={post._id} post={post} postedBy={post.postedBy} />
+        <Post key={post?._id} post={post} postedBy={post?.postedBy} />
       ))}
     </div>
   );

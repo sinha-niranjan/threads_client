@@ -5,14 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 import Actions from "./Actions";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
+import postsAtom from "../atoms/postsAtom";
 
 const Post = ({ post, postedBy }) => {
   const showToast = useShowToast();
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const currentUser = useRecoilValue(userAtom);
+  const [posts, setPosts] = useRecoilState(postsAtom);
 
   useEffect(() => {
     const getUser = async () => {
@@ -41,20 +43,20 @@ const Post = ({ post, postedBy }) => {
         method: "DELETE",
       });
       const data = await res.json();
-      console.log(data);
+
       if (data.error) {
         showToast("Error", data.error, "error");
         return;
       }
 
       showToast("Success", "Post deleted successfully !!! ", "success");
+      setPosts(posts.filter((p) => p._id !== post._id));
     } catch (error) {
       showToast("Error", error.message, "error");
     }
   };
 
-
-  console.log(post)
+  
   return (
     <Link to={`/${user?.username}/post/${post?._id}`}>
       <Flex gap={3} mb={4} py={5}>
@@ -90,6 +92,7 @@ const Post = ({ post, postedBy }) => {
             )}
             {post.replies[1] && (
               <Avatar
+                
                 size={"xs"}
                 name={post.replies[1].name}
                 src={post.replies[1].userProfilePic}

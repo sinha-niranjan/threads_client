@@ -1,14 +1,15 @@
 import { Button, Flex, Spinner } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import { BsTypeH1 } from "react-icons/bs";
 import Post from "../components/Post";
+import postsAtom from "../atoms/postsAtom";
 
 const HomePage = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useRecoilState(postsAtom);
   const [loading, setLoading] = useState(true);
   const showToast = useShowToast();
   const user = useRecoilValue(userAtom);
@@ -16,6 +17,7 @@ const HomePage = () => {
   useEffect(() => {
     const getFeedPosts = async () => {
       setLoading(true);
+      setPosts([])
       try {
         const res = await fetch("/api/post/feed");
 
@@ -33,7 +35,7 @@ const HomePage = () => {
     };
 
     getFeedPosts();
-  }, []);
+  }, [showToast, setPosts]);
   return (
     <>
       {!loading && posts.length === 0 && (

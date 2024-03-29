@@ -29,6 +29,8 @@ const MessageContainer = () => {
       setLoadingMessages(true);
       setMessages([]);
       try {
+        if (selectedConversation.mock) return;
+
         const res = await fetch("/api/message/" + selectedConversation.userId);
 
         const data = await res.json();
@@ -102,7 +104,7 @@ const MessageContainer = () => {
           />
         ))}
       </Flex>
-      <MessageInput setMessages = {setMessages} />
+      <MessageInput setMessages={setMessages} />
     </Flex>
   );
 };

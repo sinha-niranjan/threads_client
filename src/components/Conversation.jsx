@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarBadge,
+  Box,
   Flex,
   Image,
   Stack,
@@ -15,7 +16,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedConversationAtom } from "../atoms/messagesAtom";
 import userAtom from "../atoms/userAtom";
 
-const Conversation = ({ conversation }) => {
+const Conversation = ({ conversation, isOnline }) => {
   const { colorMode } = useColorMode();
   const user = conversation.participants[0];
   const currentUser = useRecoilValue(userAtom);
@@ -41,7 +42,7 @@ const Conversation = ({ conversation }) => {
           userId: user?._id,
           username: user?.username,
           userProfilePic: user?.profilePic,
-          mock:conversation?.mock
+          mock: conversation?.mock,
         })
       }
       bg={
@@ -61,7 +62,7 @@ const Conversation = ({ conversation }) => {
           }}
           src={user?.profilePic}
         >
-          <AvatarBadge boxSize={"1em"} bg="green.500" />
+          {isOnline && <AvatarBadge boxSize={"1em"} bg="green.500" />}
         </Avatar>
       </WrapItem>
 
@@ -74,7 +75,9 @@ const Conversation = ({ conversation }) => {
         </Text>
         <Text fontSize={"xs"} display={"flex"} alignItems={"center"} gap={1}>
           {currentUser?._id === lastMessage.sender ? (
-            <BsCheck2All size={16} />
+            <Box color={lastMessage.seen ? "blue.400" : ""}>
+              <BsCheck2All size={16} />
+            </Box>
           ) : null}
           {lastMessage?.text.length > 18
             ? lastMessage.text.substring(0, 18) + "..."

@@ -8,22 +8,82 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
 import useShowToast from "../hooks/useShowToast";
-import { selectedConversationAtom } from "../atoms/messagesAtom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  conversationsAtom,
+  selectedConversationAtom,
+} from "../atoms/messagesAtom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
+import { useSocket } from "../context/SocketContext";
 
 const MessageContainer = () => {
   const showToast = useShowToast();
-  const [selectedConversation, setSelectedConversation] = useRecoilState(
-    selectedConversationAtom
-  );
+  const selectedConversation = useRecoilValue(selectedConversationAtom);
   const [loadingMessages, setLoadingMessages] = useState(true);
   const [messages, setMessages] = useState([]);
   const currentUser = useRecoilValue(userAtom);
+  const { socket } = useSocket();
+  const setConversations = useSetRecoilState(conversationsAtom);
+  const messageEndRef = useRef(null);
+
+  useEffect(() => {
+    socket.on("newMessage", (message) => {
+      setConversations((prevConversations) => {
+        if (selectedConversation._id === message.conversationId) {
+          setMessages((prevMessages) => [...prevMessages, message]);
+        }
+        const updatedConversations = prevConversations.map((conversation) => {
+          if (conversation._id === message.conversationId) {
+            return {
+              ...conversation,
+              lastMessage: {
+                text: message.text,
+                sender: message.sender,
+              },
+            };
+          }
+          return conversation;
+        });
+        return updatedConversations;
+      });
+    });
+
+    return () => socket.off("newMessage");
+  }, [socket, selectedConversation, setConversations]);
+
+  useEffect(() => {
+    const lastMessageIsFromOtherUser =
+      messages.length &&
+      messages[messages.length - 1].sender !== currentUser._id;
+    if (lastMessageIsFromOtherUser) {
+      socket.emit("markMessagesAsSeen", {
+        conversationId: selectedConversation._id,
+        userId: selectedConversation.userId,
+      });
+    }
+
+    socket.on("messagesSeen", ({ conversationId }) => {
+      if (selectedConversation._id === conversationId) {
+        setMessages((prevMessages) => {
+          const updatedMessages = prevMessages.map((message) => {
+            if (!message.seen) {
+              return {
+                ...message,
+                seen: true,
+              };
+            }
+            return message;
+          });
+          return updatedMessages;
+        });
+      }
+    });
+  }, [socket, currentUser._id, messages, selectedConversation]);
+
   useEffect(() => {
     const getMessages = async () => {
       setLoadingMessages(true);
@@ -47,7 +107,11 @@ const MessageContainer = () => {
       }
     };
     getMessages();
-  }, [showToast, selectedConversation.userId]);
+  }, [showToast, selectedConversation.userId, selectedConversation.mock]);
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
   return (
     <Flex
       flex={"70"}
@@ -97,11 +161,20 @@ const MessageContainer = () => {
           ))}
 
         {messages.map((message) => (
-          <Message
+          <Flex
             key={message._id}
-            message={message}
-            ownMessage={currentUser._id === message.sender}
-          />
+            direction={"column"}
+            ref={
+              messages.length - 1 === messages.indexOf(message)
+                ? messageEndRef
+                : null
+            }
+          >
+            <Message
+              message={message}
+              ownMessage={currentUser._id === message.sender}
+            />
+          </Flex>
         ))}
       </Flex>
       <MessageInput setMessages={setMessages} />

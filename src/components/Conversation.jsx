@@ -11,7 +11,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { BsCheck2All } from "react-icons/bs";
+import { BsCheck2All, BsFillImageFill } from "react-icons/bs";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedConversationAtom } from "../atoms/messagesAtom";
 import userAtom from "../atoms/userAtom";
@@ -81,7 +81,7 @@ const Conversation = ({ conversation, isOnline }) => {
           ) : null}
           {lastMessage?.text.length > 18
             ? lastMessage.text.substring(0, 18) + "..."
-            : lastMessage.text}
+            : lastMessage.text || <BsFillImageFill size={14} />}
         </Text>
       </Stack>
     </Flex>

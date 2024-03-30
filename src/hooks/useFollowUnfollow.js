@@ -8,7 +8,7 @@ const useFollowUnfollow = (user) => {
   const currentUser = useRecoilValue(userAtom);
   const [updating, setUpdating] = useState(false);
   const [following, setFllowings] = useState(
-    user.followers.includes(currentUser._id)
+    user.followers.includes(currentUser?._id)
   );
 
   const handleFollowUnfollow = async () => {

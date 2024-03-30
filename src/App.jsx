@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage";
 import PostPages from "./pages/PostPages";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import UserPages from "./pages/UserPages";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   const user = useRecoilValue(userAtom);
@@ -50,6 +51,10 @@ function App() {
           <Route
             path="/chat"
             element={user ? <ChatPage /> : <Navigate to={"/auth"} />}
+          />
+          <Route
+            path="/settings"
+            element={user ? <SettingsPage /> : <Navigate to={"/auth"} />}
           />
         </Routes>
       </Container>

@@ -96,16 +96,16 @@ const UserHeader = ({ user }) => {
         )}
       </Flex>
       <Text>{user?.bio}</Text>
-      {user?._id === currentUser?._id && (
-        <Link as={RouterLink} to={"/update"}>
-          <Button size={"sm"}>Update Profile</Button>
-        </Link>
-      )}
-      {user?._id !== currentUser?._id && (
-        <Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating}>
-          {following ? "Unfollow" : "Follow"}
-        </Button>
-      )}
+      {currentUser?._id === user._id && (
+				<Link as={RouterLink} to='/update'>
+					<Button size={"sm"}>Update Profile</Button>
+				</Link>
+			)}
+			{currentUser?._id !== user._id && (
+				<Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating}>
+					{following ? "Unfollow" : "Follow"}
+				</Button>
+			)}
       <Flex justifyContent={"space-between"} w={"full"}>
         <Flex gap={2} alignItems={"center"}>
           <Text color={"gray.light"}>{user?.followers?.length} followers</Text>

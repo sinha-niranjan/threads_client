@@ -13,7 +13,7 @@ const HomePage = () => {
   const [posts, setPosts] = useRecoilState(postsAtom);
   const [loading, setLoading] = useState(true);
   const showToast = useShowToast();
-  const user = useRecoilValue(userAtom);
+ 
 
   useEffect(() => {
     const getFeedPosts = async () => {
@@ -56,7 +56,7 @@ const HomePage = () => {
           <Post key={post._id} post={post} postedBy={post.postedBy} />
         ))}
       </Box>
-      <Box flex={30}>
+      <Box flex={30} display={{ base: "none", md: "block" }}>
         <SuggestedUsers />
       </Box>
     </Flex>

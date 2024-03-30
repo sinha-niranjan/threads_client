@@ -9,16 +9,17 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import Message from "./Message";
-import MessageInput from "./MessageInput";
-import useShowToast from "../hooks/useShowToast";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import messageSound from "../assets/sounds/message.mp3";
 import {
   conversationsAtom,
   selectedConversationAtom,
 } from "../atoms/messagesAtom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext";
+import useShowToast from "../hooks/useShowToast";
+import Message from "./Message";
+import MessageInput from "./MessageInput";
 
 const MessageContainer = () => {
   const showToast = useShowToast();
@@ -32,10 +33,14 @@ const MessageContainer = () => {
 
   useEffect(() => {
     socket.on("newMessage", (message) => {
+      if (selectedConversation._id === message.conversationId) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }
+      if (!document.hasFocus()) {
+        const sound = new Audio(messageSound);
+        sound.play();
+      }
       setConversations((prevConversations) => {
-        if (selectedConversation._id === message.conversationId) {
-          setMessages((prevMessages) => [...prevMessages, message]);
-        }
         const updatedConversations = prevConversations.map((conversation) => {
           if (conversation._id === message.conversationId) {
             return {
